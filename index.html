@@ -1,0 +1,28 @@
+let currentSet = 1;
+const totalSets = 3;
+
+function rotateSets() {
+    // Masquer l'ensemble actuel
+    document.getElementById(`set${currentSet}`).style.display = 'none';
+
+    // Passer au prochain ensemble
+    currentSet = currentSet % totalSets + 1;
+
+    // Afficher le prochain ensemble
+    document.getElementById(`set${currentSet}`).style.display = 'block';
+}
+
+// Effectuer une rotation toutes les 3 secondes
+setInterval(rotateSets, 3000);
+
+// Fonction pour mettre à jour le don d'un nom
+function updateDonation(nameEntryId, amount) {
+    const entry = document.getElementById(nameEntryId);
+    const currentText = entry.textContent;
+    const name = currentText.split(' - ')[0];
+    const currentAmount = parseInt(currentText.split(' - $')[1]);
+
+    // Mettre à jour le montant
+    const newAmount = currentAmount + amount;
+    entry.textContent = `${name} - $${newAmount}`;
+}
