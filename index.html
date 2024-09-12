@@ -1,92 +1,96 @@
-let currentSet = 1;
-const totalSets = 3;
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Leaderboard de Dons TikTok</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #282c34;
+            margin: 0;
+            font-family: 'Arial', sans-serif;
+        }
 
-function rotateSets() {
-    // Masquer l'ensemble actuel
-    document.getElementById(`set${currentSet}`).style.display = 'none';
+        .leaderboard {
+            width: 300px;
+            padding: 20px;
+            background-color: #1c1f24;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            color: white;
+        }
 
-    // Passer au prochain ensemble
-    currentSet = currentSet % totalSets + 1;
+        .set {
+            display: none;
+        }
 
-    // Afficher le prochain ensemble
-    document.getElementById(`set${currentSet}`).style.display = 'block';
-}
+        .set.active {
+            display: block;
+        }
 
-// Effectuer une rotation toutes les 3 secondes
-setInterval(rotateSets, 3000);
+        .name-entry {
+            margin: 10px 0;
+            padding: 10px;
+            background-color: #333;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
 
-// Fonction pour mettre à jour le don d'un nom
-function updateDonation(nameEntryId, amount) {
-    const entry = document.getElementById(nameEntryId);
-    const currentText = entry.textContent;
-    const name = currentText.split(' - ')[0];
-    const currentAmount = parseInt(currentText.split(' - $')[1]);
+        .name-entry:hover {
+            background-color: #555;
+        }
+    </style>
+</head>
+<body>
+    <div class="leaderboard">
+        <div class="set active" id="set1">
+            <div class="name-entry" id="entry1">John - $10</div>
+            <div class="name-entry" id="entry2">Jane - $20</div>
+            <div class="name-entry" id="entry3">Doe - $15</div>
+        </div>
+        <div class="set" id="set2">
+            <div class="name-entry" id="entry4">Alice - $30</div>
+            <div class="name-entry" id="entry5">Bob - $25</div>
+            <div class="name-entry" id="entry6">Charlie - $40</div>
+        </div>
+        <div class="set" id="set3">
+            <div class="name-entry" id="entry7">Emily - $35</div>
+            <div class="name-entry" id="entry8">David - $50</div>
+            <div class="name-entry" id="entry9">Frank - $45</div>
+        </div>
+    </div>
 
-    // Mettre à jour le montant
-    const newAmount = currentAmount + amount;
-    entry.textContent = `${name} - $${newAmount}`;
-}
-body {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    background-color: #282c34;
-    margin: 0;
-    font-family: 'Arial', sans-serif;
-}
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const sets = document.querySelectorAll(".set");
+            let currentIndex = 0;
 
-.leaderboard {
-    width: 300px;
-    padding: 20px;
-    background-color: #1c1f24;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    text-align: center;
-    color: white;
-}
+            function rotateSets() {
+                sets[currentIndex].classList.remove("active");
+                currentIndex = (currentIndex + 1) % sets.length;
+                sets[currentIndex].classList.add("active");
+            }
 
-.set {
-    display: none;
-}
+            // Change sets every 5 seconds
+            setInterval(rotateSets, 5000);
 
-.set.active {
-    display: block;
-}
+            // Function to update the donation amount for a given name
+            function updateDonation(nameId, amount) {
+                const nameEntry = document.getElementById(nameId);
+                let currentText = nameEntry.textContent;
+                let currentAmount = parseInt(currentText.split('$')[1]);
+                let newAmount = currentAmount + amount;
+                nameEntry.textContent = currentText.split('-')[0].trim() + ' - $' + newAmount;
+            }
 
-.name-entry {
-    margin: 10px 0;
-    padding: 10px;
-    background-color: #333;
-    border-radius: 5px;
-    transition: background-color 0.3s;
-}
-
-.name-entry:hover {
-    background-color: #555;
-}
-document.addEventListener("DOMContentLoaded", function () {
-    const sets = document.querySelectorAll(".set");
-    let currentIndex = 0;
-
-    function rotateSets() {
-        sets[currentIndex].classList.remove("active");
-        currentIndex = (currentIndex + 1) % sets.length;
-        sets[currentIndex].classList.add("active");
-    }
-
-    // Change sets every 5 seconds
-    setInterval(rotateSets, 5000);
-
-    // Function to update the donation amount for a given name
-    function updateDonation(nameId, amount) {
-        const nameEntry = document.getElementById(nameId);
-        let currentText = nameEntry.textContent;
-        let currentAmount = parseInt(currentText.split('$')[1]);
-        let newAmount = currentAmount + amount;
-        nameEntry.textContent = currentText.split('-')[0].trim() + ' - $' + newAmount;
-    }
-
-    // Example: Update John's donation by $10
-    updateDonation("entry1", 10);
-});
+            // Example: Update John's donation by $10
+            updateDonation("entry1", 10);
+        });
+    </script>
+</body>
+</html>
