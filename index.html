@@ -26,3 +26,67 @@ function updateDonation(nameEntryId, amount) {
     const newAmount = currentAmount + amount;
     entry.textContent = `${name} - $${newAmount}`;
 }
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #282c34;
+    margin: 0;
+    font-family: 'Arial', sans-serif;
+}
+
+.leaderboard {
+    width: 300px;
+    padding: 20px;
+    background-color: #1c1f24;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    color: white;
+}
+
+.set {
+    display: none;
+}
+
+.set.active {
+    display: block;
+}
+
+.name-entry {
+    margin: 10px 0;
+    padding: 10px;
+    background-color: #333;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+.name-entry:hover {
+    background-color: #555;
+}
+document.addEventListener("DOMContentLoaded", function () {
+    const sets = document.querySelectorAll(".set");
+    let currentIndex = 0;
+
+    function rotateSets() {
+        sets[currentIndex].classList.remove("active");
+        currentIndex = (currentIndex + 1) % sets.length;
+        sets[currentIndex].classList.add("active");
+    }
+
+    // Change sets every 5 seconds
+    setInterval(rotateSets, 5000);
+
+    // Function to update the donation amount for a given name
+    function updateDonation(nameId, amount) {
+        const nameEntry = document.getElementById(nameId);
+        let currentText = nameEntry.textContent;
+        let currentAmount = parseInt(currentText.split('$')[1]);
+        let newAmount = currentAmount + amount;
+        nameEntry.textContent = currentText.split('-')[0].trim() + ' - $' + newAmount;
+    }
+
+    // Example: Update John's donation by $10
+    updateDonation("entry1", 10);
+});
